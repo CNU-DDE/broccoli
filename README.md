@@ -1,2 +1,3 @@
-# user-manager
-Injik/user-manager microservice
+# Injik/user-manager
+
+Microservice sub-repository for Injik/user-manager
