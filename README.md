@@ -1,3 +1,3 @@
-# Injik/user-manager
+# Injik/Broccoli
 
-Microservice sub-repository for Injik/user-manager
+User management microservice sub-repository for Injik
