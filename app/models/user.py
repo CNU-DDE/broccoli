@@ -60,8 +60,9 @@ class User(AbstractBaseUser):
     # PRIMARY
     identifier = models.CharField(
         verbose_name='id',
-        max_length=255,
+        max_length=72,
         unique=True,
+        primary_key=True,
     )
 
     # Customized
