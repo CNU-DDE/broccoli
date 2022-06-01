@@ -1,0 +1,7 @@
+from django.db import models
+from .base_data import BaseData
+
+class CLData(BaseData, models.Model):
+    title = models.CharField(
+        max_length = 255,
+    )
