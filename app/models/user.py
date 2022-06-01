@@ -11,6 +11,7 @@ class UserManager(BaseUserManager):
             display_name,
             password,
             keystore,
+            email,
             user_type=DEFAULT_USER_TYPE):
 
         # Set FIELD
@@ -21,6 +22,7 @@ class UserManager(BaseUserManager):
             identifier = identifier,
             user_type = user_type,
             display_name = display_name,
+            email = email,
         )
 
         # Set PASSWORD
@@ -32,7 +34,7 @@ class UserManager(BaseUserManager):
 
     def create_superuser(self, identifier, display_name, password):
 
-        user = self.create_user(identifier, display_name, password, None, 5)
+        user = self.create_user(identifier, display_name, password, None, "no-email@example.com", 5)
 
         # Save USER
         user.is_admin = True
@@ -62,13 +64,16 @@ class User(AbstractBaseUser):
         unique=True,
     )
 
+    # Customized
     user_type = models.SmallIntegerField(default=3)
     display_name = models.CharField(max_length=255)
+    email = models.EmailField(default=None)
 
     # Django required
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
 
+    # Configurations
     objects = UserManager()
 
     USERNAME_FIELD = 'identifier'
