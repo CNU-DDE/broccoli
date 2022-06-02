@@ -1,5 +1,5 @@
 from ..serializers import UserSerializer
-from ..utils import didutils, hashutils, convutils
+from ..utils import httputils, cryptoutils, convutils
 from ..errors import DIDReqError
 
 from rest_framework.views import APIView
@@ -19,7 +19,7 @@ from rest_framework import status
 }
 """
 class UserResponse(APIView):
-    
+
     @staticmethod
     def send_response(keystore, code=status.HTTP_201_CREATED, err=None):
         return Response(
@@ -33,10 +33,10 @@ class UserResponse(APIView):
     def post(self, request):
         try:
             # Get keystore
-            keystore = didutils.did_get_req('/ssi/did')
+            keystore = httputils.did_get_req('/ssi/did')
 
             # Generate password hash
-            password = hashutils.hash_dict({
+            password = cryptoutils.hash_dict({
                 "password": request.data["password"],
                 "keystore": keystore,
             })

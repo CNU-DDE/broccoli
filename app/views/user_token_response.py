@@ -1,5 +1,5 @@
 from ..models import User
-from ..utils import hashutils, convutils
+from ..utils import cryptoutils, convutils
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -29,7 +29,7 @@ class UserTokenResponse(APIView):
             keystore = request.data["keystore"]
 
             # Generate password hash
-            password = hashutils.hash_dict({
+            password = cryptoutils.hash_dict({
                 "password": request.data["password"],
                 "keystore": keystore,
             })
