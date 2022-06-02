@@ -1,7 +1,0 @@
-import os
-
-DB_HOST = "127.0.0.1"
-DB_PORT = "3306"
-DB_USER = os.environ["MARIADB_USER"]
-DB_PASSWORD = os.environ["MARIADB_PASSWORD"]
-DB_DATABASE = os.environ["MARIADB_DATABASE"]
