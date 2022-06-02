@@ -3,14 +3,18 @@ CUSTOM CONSTANTS
 """
 import os
 
-DB_HOST = "127.0.0.1"
-DB_PORT = "3306"
+DB_HOST = os.environ["MARIADB_HOST"]
+DB_PORT = os.environ["MARIADB_PORT"]
 DB_USER = os.environ["MARIADB_USER"]
 DB_PASSWORD = os.environ["MARIADB_PASSWORD"]
 DB_DATABASE = os.environ["MARIADB_DATABASE"]
 
 RUNMODE = os.environ["RUNMODE"]
+
 DID_HOST = os.environ["DID_HOST"]
+DID_PORT = os.environ["DID_PORT"]
+
+JWT_SECR = os.environ["JWT_SECR"]
 
 """
 Django settings for config project.
