@@ -9,11 +9,8 @@ DB_USER = os.environ["MARIADB_USER"]
 DB_PASSWORD = os.environ["MARIADB_PASSWORD"]
 DB_DATABASE = os.environ["MARIADB_DATABASE"]
 
-DEV_HOST = "192.168.35.10"
-PROD_HOST = "192.168.35.10" # TODO: set production host
-
 RUNMODE = os.environ["RUNMODE"]
-DID_URL = os.environ["DID_URL"]
+DID_HOST = os.environ["DID_HOST"]
 
 """
 Django settings for config project.
@@ -40,11 +37,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-$our&j-f@o1^^_yu#g21z2gg&)3tuj)_56fvq15+n-bg$#&d4)'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = (RUNMODE == 'development')
 
 ALLOWED_HOSTS = [
-    DEV_HOST,
-    PROD_HOST,
+    '127.0.0.1',
+    'localhost',
+    '192.168.35.10',
 ]
 
 
