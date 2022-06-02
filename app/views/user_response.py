@@ -10,7 +10,7 @@ from rest_framework import status
 [POST] /api/user
 @RequestBody: {
     password:       string,
-    isEmployer:     bool,
+    isEmployee:     bool,
     displayName:    string,
     birth:          string | null,
     address:        string,
@@ -61,8 +61,12 @@ class UserResponse(APIView):
 
         # Known error
         except DIDReqError as err:
-            return Response(err.message, status=err.status_code)
+            return self.send_response(None, status.HTTP_400_BAD_REQUEST, err.message)
 
         # Unknown error
         except Exception as err:
-            return Response(f"Unexpected {err=}, {type(err)=}", status=status.HTTP_400_BAD_REQUEST)
+            return self.send_response(
+                None,
+                status.HTTP_500_INTERNAL_SERVER_ERROR,
+                convutils.error_message(err),
+            )
