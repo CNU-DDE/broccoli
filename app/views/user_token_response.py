@@ -42,7 +42,11 @@ class UserTokenResponse(APIView):
 
             # Validate: User found
             if is_user_exists:
-                return self.send_response()
+                res = self.send_response()
+                res.set_cookie("access-token", cryptoutils.gen_JWT({
+                    "identifier": keystore["pubKey"],
+                }))
+                return res
 
             # Validate: User not found
             return self.send_response(status.HTTP_401_UNAUTHORIZED, "User not found")
