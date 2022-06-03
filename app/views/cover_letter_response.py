@@ -23,6 +23,8 @@ class CoverLetterResponse(APIView):
     def post(self, request):
         try:
             # Check login
+            if "access_token" not in request.COOKIES:
+                raise errors.AuthorizationFailedError("Access token not exists")
             did = cryptoutils.verify_JWT(request.COOKIES["access_token"])
 
             # Check employee
