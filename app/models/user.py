@@ -3,7 +3,7 @@ from django.contrib.auth.models import (BaseUserManager, AbstractBaseUser)
 
 class UserManager(BaseUserManager):
     def create_user(self,
-            identifier,
+            did,
             password,
             user_type,
             display_name,
@@ -13,11 +13,11 @@ class UserManager(BaseUserManager):
             birth=None):
 
         # Set FIELD
-        if not identifier:
+        if not did:
             raise ValueError('Users must have an ID')
 
         user = self.model(
-            identifier = identifier,
+            did = did,
             display_name = display_name,
             address = address,
             contact = contact,
@@ -33,10 +33,10 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, identifier, display_name, password):
+    def create_superuser(self, did, display_name, password):
 
         user = self.create_user(
-            identifier = identifier,
+            did = did,
             password = password,
             user_type = 5,
             display_name = display_name,
@@ -56,13 +56,13 @@ class User(AbstractBaseUser):
     objects = UserManager()
 
     # PRIMARY
-    identifier = models.CharField(
+    did = models.CharField(
         max_length=128,
         unique=True,
         primary_key=True,
     )
 
-    USERNAME_FIELD = 'identifier'
+    USERNAME_FIELD = 'did'
 
     # Customized
     # Required

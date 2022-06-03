@@ -1,6 +1,7 @@
-from ..serializers import CLSerializer
-from ..utils import cryptoutils, convutils
-from ..errors import JWTValidationError
+from ..serializers import CLSerializer, CLListSerializer
+from ..utils import cryptoutils, modelutils
+from .. import errors
+from ..models import CLData
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -17,13 +18,35 @@ class CoverLetterResponse(APIView):
             status=code,
         )
 
+    @staticmethod
+    def gen_get_response(cl_list, code=status.HTTP_200_OK, err=None):
+        return Response(
+            {
+                "error": err,
+                "cover-letters": cl_list,
+            },
+            status=code,
+        )
+
     """
     [POST] /api/cover-letter
+    @PathVariable: nil
+    @RequestParam: nil
+    @RequestBody: {
+        title:          string,
+        cover-letter:   string
+    }
     """
     def post(self, request):
         try:
             # Check login
+            if "access_token" not in request.COOKIES:
+                raise errors.AuthorizationFailedError("Access token not exists")
             did = cryptoutils.verify_JWT(request.COOKIES["access_token"])
+
+            # Check employee
+            if not modelutils.is_employee(did):
+                raise errors.PermissionDeniedError()
 
             # Generate serializer
             serializer = CLSerializer(data = {
@@ -32,19 +55,53 @@ class CoverLetterResponse(APIView):
                 "content": request.data["cover-letter"],
             })
 
-            # Validation & response
-            if serializer.is_valid():
-                serializer.save()
-                return self.gen_post_response()
-            return self.gen_post_response(status.HTTP_400_BAD_REQUEST, serializer.errors)
+            # Validation
+            if not serializer.is_valid():
+                raise errors.ClientFaultError(serializer.errors)
 
-        # Handled error
-        except JWTValidationError as err:
-            return self.gen_post_response(err.status_code, err.message)
+            # Response
+            serializer.save()
+            return self.gen_post_response()
+
+        # Handle all known error
+        except errors.BaseError as err:
+            return err.gen_response()
+
+        except KeyError as err:
+            return errors.ClientFaultError(err).gen_response()
 
         # Unknown error
         except Exception as err:
-            return self.gen_post_response(
-                status.HTTP_500_INTERNAL_SERVER_ERROR,
-                convutils.error_message(err),
+            return errors.UnhandledError(err).gen_response()
+
+    """
+    [GET] /api/cover-letter
+    @PathVariable: nil
+    @RequestParam: nil
+    @RequestBody: nil
+    """
+    def get(self, request):
+        try:
+            # Check login
+            if "access_token" not in request.COOKIES:
+                raise errors.AuthorizationFailedError("Access token not exists")
+            did = cryptoutils.verify_JWT(request.COOKIES["access_token"])
+
+            # Check employee
+            if not modelutils.is_employee(did):
+                raise errors.PermissionDeniedError()
+
+            # Generate serializer
+            serializer = CLListSerializer(
+                CLData.objects.filter(owner = did),
+                many=True
             )
+            return self.gen_get_response(serializer.data)
+
+        # Handle all known error
+        except errors.BaseError as err:
+            return err.gen_response()
+
+        # Unknown error
+        except Exception as err:
+            return errors.UnhandledError(err).gen_response()

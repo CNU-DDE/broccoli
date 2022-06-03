@@ -1,18 +1,11 @@
 from ..models import User
-from ..utils import cryptoutils, convutils
+from ..utils import cryptoutils
+from .. import errors
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 
-"""
-[POST] /api/user/token
-@RequestBody: {
-    password:   string,
-    keystore:   { did: string, walletAddress: string, privKey: string, pubKey: string }
-}
-TODO: This might not work due to CORS and CSRF problem
-"""
 class UserTokenResponse(APIView):
 
     @staticmethod
@@ -24,6 +17,16 @@ class UserTokenResponse(APIView):
             status=code,
         )
 
+    """
+    [POST] /api/user/token
+    @PathVariable: nil
+    @RequestParam: nil
+    @RequestBody: {
+        password:   string,
+        keystore:   { did: string, walletAddress: string, privKey: string, pubKey: string }
+    }
+    TODO: This might not work due to CORS and CSRF problem
+    """
     def post(self, request):
         try:
             # Get keystore
@@ -37,22 +40,26 @@ class UserTokenResponse(APIView):
 
             # SELECT 1 FROM user;
             is_user_exists = User.objects.filter(
-                identifier = keystore["did"],
+                did = keystore["did"],
                 password = password,
-            )
-
-            # Validate: User found
-            if is_user_exists:
-                res = self.send_response()
-                res.set_cookie("access_token", cryptoutils.gen_JWT(keystore["did"]))
-                return res
+            ).exists()
 
             # Validate: User not found
-            return self.send_response(status.HTTP_401_UNAUTHORIZED, "User not found")
+            if not is_user_exists:
+                raise errors.AuthorizationFailedError("User not found")
 
-        # Unknown error
+            # Validate: User found
+            res = self.send_response()
+            res.set_cookie("access_token", cryptoutils.gen_JWT(keystore["did"]))
+            return res
+
+        # Handle all known error
+        except errors.BaseError as err:
+            return err.gen_response()
+
+        except KeyError as err:
+            return errors.ClientFaultError(err).gen_response()
+
+        # Handle unhandled error
         except Exception as err:
-            return self.send_response(
-                status.HTTP_500_INTERNAL_SERVER_ERROR,
-                convutils.error_message(err),
-            )
+            return errors.UnhandledError(err).gen_response()
