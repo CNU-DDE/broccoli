@@ -15,6 +15,10 @@ DID_HOST = os.environ["DID_HOST"]
 DID_PORT = os.environ["DID_PORT"]
 
 JWT_SECR = os.environ["JWT_SECR"]
+JWT_EXPR = 7200 # JWT expires after 2 hours
+JWT_ALGO = "HS256"
+
+FE_HOST = os.environ["FE_HOST"]
 
 """
 Django settings for config project.
