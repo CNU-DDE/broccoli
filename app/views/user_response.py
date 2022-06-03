@@ -6,18 +6,6 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 
-"""
-[POST] /api/user
-@RequestBody: {
-    password:       string,
-    isEmployee:     bool,
-    displayName:    string,
-    birth:          string | null,
-    address:        string,
-    contact:        string,
-    email:          string
-}
-"""
 class UserResponse(APIView):
 
     @staticmethod
@@ -30,6 +18,20 @@ class UserResponse(APIView):
             status=code,
         )
 
+    """
+    [POST] /api/user
+    @PathVariable: nil
+    @RequestParam: nil
+    @RequestBody: {
+        password:       string,
+        isEmployee:     bool,
+        displayName:    string,
+        birth:          string | null,
+        address:        string,
+        contact:        string,
+        email:          string
+    }
+    """
     def post(self, request):
         try:
             # Get keystore

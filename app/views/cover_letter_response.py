@@ -19,6 +19,12 @@ class CoverLetterResponse(APIView):
 
     """
     [POST] /api/cover-letter
+    @PathVariable: nil
+    @RequestParam: nil
+    @ReuestBody: {
+        title:          string,
+        cover-letter:   string
+    }
     """
     def post(self, request):
         try:
@@ -56,3 +62,5 @@ class CoverLetterResponse(APIView):
         # Unknown error
         except Exception as err:
             return errors.UnhandledError(err).gen_response()
+
+

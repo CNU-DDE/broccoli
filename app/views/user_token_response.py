@@ -6,14 +6,6 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 
-"""
-[POST] /api/user/token
-@RequestBody: {
-    password:   string,
-    keystore:   { did: string, walletAddress: string, privKey: string, pubKey: string }
-}
-TODO: This might not work due to CORS and CSRF problem
-"""
 class UserTokenResponse(APIView):
 
     @staticmethod
@@ -25,6 +17,16 @@ class UserTokenResponse(APIView):
             status=code,
         )
 
+    """
+    [POST] /api/user/token
+    @PathVariable: nil
+    @RequestParam: nil
+    @RequestBody: {
+        password:   string,
+        keystore:   { did: string, walletAddress: string, privKey: string, pubKey: string }
+    }
+    TODO: This might not work due to CORS and CSRF problem
+    """
     def post(self, request):
         try:
             # Get keystore
