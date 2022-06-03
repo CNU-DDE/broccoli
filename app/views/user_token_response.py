@@ -44,7 +44,7 @@ class UserTokenResponse(APIView):
 
             # Validate: User not found
             if not is_user_exists:
-                raise errors.AuthorizationFailedError()
+                raise errors.AuthorizationFailedError("User not found")
 
             # Validate: User found
             res = self.send_response()

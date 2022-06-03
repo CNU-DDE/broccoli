@@ -15,16 +15,16 @@ class DIDReqError(BaseError):
         super().__init__(status_code, message)
 
 class JWTValidationError(BaseError):
-    def __init__(self, message):
-        super().__init__(status.HTTP_401_UNAUTHORIZED, message)
+    def __init__(self, err):
+        super().__init__(status.HTTP_401_UNAUTHORIZED, error_message(err))
 
 class PermissionDeniedError(BaseError):
-    def __init__(self):
-        super().__init__(status.HTTP_403_FORBIDDEN, "Permission denied")
+    def __init__(self, message="Permission denied"):
+        super().__init__(status.HTTP_403_FORBIDDEN, message)
 
 class AuthorizationFailedError(BaseError):
-    def __init__(self):
-        super().__init__(status.HTTP_401_UNAUTHORIZED, "Authorization failed")
+    def __init__(self, message="Authorization failed"):
+        super().__init__(status.HTTP_401_UNAUTHORIZED, message)
 
 class ClientFaultError(BaseError):
     def __init__(self, message):
