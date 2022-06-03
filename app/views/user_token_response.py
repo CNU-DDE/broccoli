@@ -37,16 +37,14 @@ class UserTokenResponse(APIView):
 
             # SELECT 1 FROM user;
             is_user_exists = User.objects.filter(
-                identifier = keystore["pubKey"],
+                identifier = keystore["did"],
                 password = password,
             )
 
             # Validate: User found
             if is_user_exists:
                 res = self.send_response()
-                res.set_cookie("access-token", cryptoutils.gen_JWT({
-                    "identifier": keystore["pubKey"],
-                }))
+                res.set_cookie("access_token", cryptoutils.gen_JWT(keystore["did"]))
                 return res
 
             # Validate: User not found

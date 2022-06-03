@@ -43,7 +43,7 @@ class UserResponse(APIView):
 
             # Generate serializer
             serializer = UserSerializer(data = {
-                "identifier": keystore["pubKey"],
+                "identifier": keystore["did"],
                 "password": password,
                 "user_type": convutils.user_type(request.data["isEmployee"]),
                 "display_name": request.data["displayName"],
@@ -62,6 +62,9 @@ class UserResponse(APIView):
         # Known error
         except DIDReqError as err:
             return self.send_response(None, status.HTTP_400_BAD_REQUEST, err.message)
+
+        except KeyError as err:
+            return self.send_response(None, status.HTTP_400_BAD_REQUEST, "Wrong sign in form")
 
         # Unknown error
         except Exception as err:
