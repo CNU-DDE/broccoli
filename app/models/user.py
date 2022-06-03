@@ -57,7 +57,7 @@ class User(AbstractBaseUser):
 
     # PRIMARY
     identifier = models.CharField(
-        max_length=72,
+        max_length=128,
         unique=True,
         primary_key=True,
     )
