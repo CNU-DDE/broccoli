@@ -1,5 +1,6 @@
 from ..models import User
-from ..utils import cryptoutils, convutils
+from ..utils import cryptoutils
+from .. import errors
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -41,18 +42,22 @@ class UserTokenResponse(APIView):
                 password = password,
             )
 
-            # Validate: User found
-            if is_user_exists:
-                res = self.send_response()
-                res.set_cookie("access_token", cryptoutils.gen_JWT(keystore["did"]))
-                return res
-
             # Validate: User not found
-            return self.send_response(status.HTTP_401_UNAUTHORIZED, "User not found")
+            if not is_user_exists:
+                raise errors.AuthorizationFailedError()
 
-        # Unknown error
+            # Validate: User found
+            res = self.send_response()
+            res.set_cookie("access_token", cryptoutils.gen_JWT(keystore["did"]))
+            return res
+
+        # Handle all known error
+        except errors.BaseError as err:
+            return err.gen_response()
+
+        except KeyError as err:
+            return errors.ClientFaultError(err).gen_response()
+
+        # Handle unhandled error
         except Exception as err:
-            return self.send_response(
-                status.HTTP_500_INTERNAL_SERVER_ERROR,
-                convutils.error_message(err),
-            )
+            return errors.UnhandledError(err).gen_response()

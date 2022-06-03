@@ -1,6 +1,6 @@
 from ..serializers import CLSerializer
-from ..utils import cryptoutils, convutils
-from ..errors import JWTValidationError
+from ..utils import cryptoutils, modelutils
+from .. import errors
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -25,6 +25,10 @@ class CoverLetterResponse(APIView):
             # Check login
             did = cryptoutils.verify_JWT(request.COOKIES["access_token"])
 
+            # Check employee
+            if not modelutils.is_employee(did):
+                raise errors.PermissionDeniedError()
+
             # Generate serializer
             serializer = CLSerializer(data = {
                 "owner": did,
@@ -32,19 +36,21 @@ class CoverLetterResponse(APIView):
                 "content": request.data["cover-letter"],
             })
 
-            # Validation & response
-            if serializer.is_valid():
-                serializer.save()
-                return self.gen_post_response()
-            return self.gen_post_response(status.HTTP_400_BAD_REQUEST, serializer.errors)
+            # Validation
+            if not serializer.is_valid():
+                raise errors.ClientFaultError(serializer.errors)
 
-        # Handled error
-        except JWTValidationError as err:
-            return self.gen_post_response(err.status_code, err.message)
+            # Response
+            serializer.save()
+            return self.gen_post_response()
+
+        # Handle all known error
+        except errors.BaseError as err:
+            return err.gen_response()
+
+        except KeyError as err:
+            return errors.ClientFaultError(err).gen_response()
 
         # Unknown error
         except Exception as err:
-            return self.gen_post_response(
-                status.HTTP_500_INTERNAL_SERVER_ERROR,
-                convutils.error_message(err),
-            )
+            return errors.UnhandledError(err).gen_response()

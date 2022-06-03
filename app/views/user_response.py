@@ -1,6 +1,6 @@
 from ..serializers import UserSerializer
 from ..utils import httputils, cryptoutils, convutils
-from ..errors import DIDReqError
+from .. import errors
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -53,23 +53,21 @@ class UserResponse(APIView):
                 "email": request.data["email"],
             })
 
-            # Validation & Response
-            if serializer.is_valid():
-                serializer.save()
-                return self.send_response(keystore)
-            return self.send_response(None, status.HTTP_400_BAD_REQUEST, serializer.errors)
+            # Validation
+            if not serializer.is_valid():
+                raise errors.ClientFaultError(serializer.errors)
 
-        # Known error
-        except DIDReqError as err:
-            return self.send_response(None, status.HTTP_400_BAD_REQUEST, err.message)
+            # Response
+            serializer.save()
+            return self.send_response(keystore)
+
+        # Handle all known error
+        except errors.BaseError as err:
+            return err.gen_response()
 
         except KeyError as err:
-            return self.send_response(None, status.HTTP_400_BAD_REQUEST, "Wrong sign in form")
+            return errors.ClientFaultError("Wrong sign in form").gen_response()
 
         # Unknown error
         except Exception as err:
-            return self.send_response(
-                None,
-                status.HTTP_500_INTERNAL_SERVER_ERROR,
-                convutils.error_message(err),
-            )
+            return errors.UnhandledError(err).gen_response()
