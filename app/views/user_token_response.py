@@ -37,7 +37,7 @@ class UserTokenResponse(APIView):
 
             # SELECT 1 FROM user;
             is_user_exists = User.objects.filter(
-                identifier = keystore["did"],
+                did = keystore["did"],
                 password = password,
             )
 

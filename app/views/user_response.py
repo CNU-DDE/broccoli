@@ -43,7 +43,7 @@ class UserResponse(APIView):
 
             # Generate serializer
             serializer = UserSerializer(data = {
-                "identifier": keystore["did"],
+                "did": keystore["did"],
                 "password": password,
                 "user_type": convutils.user_type(request.data["isEmployee"]),
                 "display_name": request.data["displayName"],
