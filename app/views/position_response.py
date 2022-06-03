@@ -85,22 +85,13 @@ class PositionResponse(APIView):
             return errors.UnhandledError(err).gen_response()
 
     """
-    [GET] /api/cover-letter
+    [GET] /api/position
     @PathVariable: nil
     @RequestParam: nil
     @RequestBody: nil
     """
     def get(self, request):
         try:
-            # Check login
-            if "access_token" not in request.COOKIES:
-                raise errors.AuthorizationFailedError("Access token not exists")
-            did = cryptoutils.verify_JWT(request.COOKIES["access_token"])
-
-            # Check employee
-            if not modelutils.is_employee(did):
-                raise errors.PermissionDeniedError()
-
             # Generate serializer
             serializer = CLListSerializer(
                 CLData.objects.filter(owner = did),
