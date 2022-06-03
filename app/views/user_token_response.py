@@ -42,7 +42,7 @@ class UserTokenResponse(APIView):
             is_user_exists = User.objects.filter(
                 did = keystore["did"],
                 password = password,
-            )
+            ).exists()
 
             # Validate: User not found
             if not is_user_exists:
