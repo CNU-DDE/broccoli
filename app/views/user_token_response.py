@@ -6,11 +6,12 @@ from rest_framework.response import Response
 from rest_framework import status
 
 """
-[POST] /api/user
+[POST] /api/user/token
 @RequestBody: {
     password:   string,
     keystore:   { did: string, walletAddress: string, privKey: string, pubKey: string }
 }
+TODO: This might not work due to CORS and CSRF problem
 """
 class UserTokenResponse(APIView):
 
