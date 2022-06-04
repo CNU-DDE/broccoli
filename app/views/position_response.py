@@ -1,7 +1,6 @@
-from ..serializers import PositionSerializer
+from ..serializers import PositionListSerializer, PositionSerializer
 from ..utils import cryptoutils, modelutils
 from .. import errors
-from ..models import CLData
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -23,7 +22,7 @@ class PositionResponse(APIView):
         return Response(
             {
                 "error": err,
-                "cover-letters": cl_list,
+                "positions": cl_list,
             },
             status=code,
         )
@@ -92,11 +91,11 @@ class PositionResponse(APIView):
     """
     def get(self, request):
         try:
+            # Ignore unused
+            _ = request
+
             # Generate serializer
-            serializer = CLListSerializer(
-                CLData.objects.filter(owner = did),
-                many=True
-            )
+            serializer = PositionListSerializer(many=True)
             return self.gen_get_response(serializer.data)
 
         # Handle all known error
