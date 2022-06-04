@@ -19,20 +19,18 @@ class PositionDetailResponse(APIView):
         )
 
     """
-    [GET] /api/position/:position-id
+    [GET] /api/position/:position_id
     @PathVariable:  nil
-    @RequestParam:  position-id     Position ID
+    @RequestParam:  position_id     Position ID
     @RequestBody:   nil
     """
-    def get(self, request):
+    def get(self, request, position_id):
         try:
-            # Get position ID
-            position_id = request.query_params["position-id"]
 
             # Generate serializer
             serializer = PositionDetailSerializer(
                 PositionData.objects.filter(pk=position_id),
-                many=False,
+                many=True,
             )
             return self.gen_get_response(serializer.data)
 
