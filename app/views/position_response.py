@@ -97,7 +97,7 @@ class PositionResponse(APIView):
 
             # Generate serializer
             serializer = PositionListSerializer(
-                PositionData.objects.all(),
+                PositionData.objects.all().select_related("owner"),
                 many=True,
             )
             return self.gen_get_response(serializer.data)

@@ -1,9 +1,0 @@
-{
-    "password": "toor",
-    "keystore": {
-        "did": "did:ethr:ropsten:0x0341204ee10e7e39cc240d854286e69e5ffe1970eb741898ef0654bfc96cdf64bd",
-        "walletAddress": "0x0eCa0Fb567aAFdde2DDfD470c2cFa9C1996Bf4E3",
-        "privKey": "0xbcefc8921f2618c3eed46cc4aafd82fd6cd06605fcdc6939dcc99e9dad2e7a41",
-        "pubKey": "0x0341204ee10e7e39cc240d854286e69e5ffe1970eb741898ef0654bfc96cdf64bd"
-    }
-}

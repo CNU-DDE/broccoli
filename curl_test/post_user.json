@@ -1,9 +1,0 @@
-{ 
-    "password": "toor",
-    "isEmployee": true, 
-    "displayName": "test name", 
-    "birth": "1997.07.07",
-    "address": "abcdefg", 
-    "contact": "01077777777", 
-    "email": "testemail@gmail.com" 
-}
