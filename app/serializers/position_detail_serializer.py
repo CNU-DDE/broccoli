@@ -1,13 +1,20 @@
-from ..models import PositionData
+from django.contrib.auth import get_user_model
 from rest_framework import serializers
+from ..models import PositionData
 
+# Nested serializer
+class EmployerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = get_user_model()
+        fields = [
+            "display_name",
+            "contact",
+            "email",
+            "address",
+        ]
+
+# Main serializer
 class PositionDetailSerializer(serializers.ModelSerializer):
-
-    # JOIN fields
-    employer_display_name = serializers.SerializerMethodField()
-    employer_contact = serializers.SerializerMethodField()
-    employer_email = serializers.SerializerMethodField()
-    employer_address = serializers.SerializerMethodField()
 
     # Serialize format
     class Meta:
@@ -16,10 +23,6 @@ class PositionDetailSerializer(serializers.ModelSerializer):
             "id",
             "title",
             "content",
-            "employer_display_name",
-            "employer_contact",
-            "employer_email",
-            "employer_address",
             "employment_period",
             "working_time",
             "payment_interval_type",
@@ -27,15 +30,8 @@ class PositionDetailSerializer(serializers.ModelSerializer):
             "hiring_number",
         ]
 
-    # JOIN paths
-    def get_employer_display_name(self, obj):
-        return obj.owner.display_name
-
-    def get_employer_contact(self, obj):
-        return obj.owner.contact
-
-    def get_employer_email(self, obj):
-        return obj.owner.email
-
-    def get_employer_address(self, obj):
-        return obj.owner.address
+    # Recursive formatting
+    def to_representation(self, obj):
+        resp = super().to_representation(obj)
+        resp["employer"] = EmployerSerializer(obj.owner).data
+        return resp
