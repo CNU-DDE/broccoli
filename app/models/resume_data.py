@@ -20,7 +20,7 @@ class ResumeData(BaseData, models.Model):
         related_name="verifier",
         blank=True,
         null=True,
-        default=True,
+        default=None,
     )
 
     # Submitted position
@@ -30,5 +30,5 @@ class ResumeData(BaseData, models.Model):
         related_name="position",
         blank=True,
         null=True,
-        default=True,
+        default=None,
     )
