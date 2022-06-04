@@ -1,7 +1,6 @@
 from ..serializers import ClaimSerializer
 from ..utils import cryptoutils, modelutils
 from .. import errors
-#  from ..models import CLData
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -19,22 +18,23 @@ class ClaimResponse(APIView):
         )
 
     @staticmethod
-    def gen_get_response(cl_list, code=status.HTTP_200_OK, err=None):
+    def gen_get_response(claim_list, code=status.HTTP_200_OK, err=None):
         return Response(
             {
                 "error": err,
-                "cover-letters": cl_list,
+                "claims": claim_list,
             },
             status=code,
         )
 
     """
-    [POST] /api/cover-letter
+    [POST] /api/claim
     @PathVariable: nil
     @RequestParam: nil
     @RequestBody: {
-        title:          string,
-        cover-letter:   string
+        issuer: string,
+        title:  string,
+        claim:  { from: string, to: string, at: string, what: string }
     }
     """
     def post(self, request):
@@ -76,7 +76,7 @@ class ClaimResponse(APIView):
             return errors.UnhandledError(err).gen_response()
 
     """
-    [GET] /api/cover-letter
+    [GET] /api/claim
     @PathVariable: nil
     @RequestParam: nil
     @RequestBody: nil
