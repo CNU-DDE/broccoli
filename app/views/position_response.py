@@ -19,11 +19,11 @@ class PositionResponse(APIView):
         )
 
     @staticmethod
-    def gen_get_response(cl_list, code=status.HTTP_200_OK, err=None):
+    def gen_get_response(pos_list, code=status.HTTP_200_OK, err=None):
         return Response(
             {
                 "error": err,
-                "positions": cl_list,
+                "positions": pos_list,
             },
             status=code,
         )
