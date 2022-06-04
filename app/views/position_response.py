@@ -1,11 +1,11 @@
-from ..serializers import PositionListSerializer, PositionSerializer
+from .. import errors
 from ..utils import cryptoutils, modelutils
 from ..models import PositionData
-from .. import errors
+from ..serializers import PositionListSerializer, PositionSerializer
 
+from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
 
 class PositionResponse(APIView):
 
@@ -97,7 +97,7 @@ class PositionResponse(APIView):
 
             # Generate serializer
             serializer = PositionListSerializer(
-                PositionData.objects.all().select_related("owner"),
+                PositionData.objects.all().select_related("owner"), # type: ignore
                 many=True,
             )
             return self.gen_get_response(serializer.data)
