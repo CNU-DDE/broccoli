@@ -1,5 +1,6 @@
 from ..serializers import PositionListSerializer, PositionSerializer
 from ..utils import cryptoutils, modelutils
+from ..models import PositionData
 from .. import errors
 
 from rest_framework.views import APIView
@@ -95,7 +96,10 @@ class PositionResponse(APIView):
             _ = request
 
             # Generate serializer
-            serializer = PositionListSerializer(many=True)
+            serializer = PositionListSerializer(
+                PositionData.objects.all(),
+                many=True,
+            )
             return self.gen_get_response(serializer.data)
 
         # Handle all known error
