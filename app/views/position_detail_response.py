@@ -24,10 +24,8 @@ class PositionDetailResponse(APIView):
     @RequestParam:  position_id     Position ID
     @RequestBody:   nil
     """
-    def get(self, request, position_id):
+    def get(self, _, position_id):
         try:
-            # Ignode unused
-            _ = request
 
             # Generate serializer
             serializer = PositionDetailSerializer(

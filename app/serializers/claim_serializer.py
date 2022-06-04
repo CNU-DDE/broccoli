@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from ..models import ClaimData
-from .user_serializer import UserDisplayNameSerializer
+from . import user_serializer
 
 # Default serializer
 class ClaimSerializer(serializers.ModelSerializer):
@@ -8,7 +8,7 @@ class ClaimSerializer(serializers.ModelSerializer):
         model = ClaimData
         fields = '__all__'
 
-# Employer serializer
+# Claim list serializer for employer
 class EmployerClaimListSerializer(serializers.ModelSerializer):
 
     # Serialize format
@@ -22,10 +22,10 @@ class EmployerClaimListSerializer(serializers.ModelSerializer):
     # Recursive formatting
     def to_representation(self, obj):
         resp = super().to_representation(obj)
-        resp["holder"] = UserDisplayNameSerializer(obj.owner).data
+        resp["holder"] = user_serializer.UserDisplayNameSerializer(obj.owner).data
         return resp
 
-# Employer serializer
+# Claim list serializer for employee
 class EmployeeClaimListSerializer(serializers.ModelSerializer):
 
     # Serialize format
