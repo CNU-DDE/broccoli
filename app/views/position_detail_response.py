@@ -29,10 +29,15 @@ class PositionDetailResponse(APIView):
 
             # Generate serializer
             serializer = PositionDetailSerializer(
-                PositionData.objects.filter(pk=position_id),
+                PositionData.objects.filter(pk=position_id).select_related("owner"),
                 many=True,
             )
-            return self.gen_get_response(serializer.data)
+
+            # Response just one
+            if len(serializer.data) == 1:
+                return self.gen_get_response(serializer.data[0])
+            else:
+                return self.gen_get_response({})
 
         # Handle all known error
         except errors.BaseError as err:
