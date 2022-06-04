@@ -6,7 +6,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 
-class PositionResponse(APIView):
+class PositionDetailResponse(APIView):
 
     @staticmethod
     def gen_get_response(position, code=status.HTTP_200_OK, err=None):
