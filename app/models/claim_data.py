@@ -12,6 +12,10 @@ class ClaimData(BaseData, models.Model):
     @FIELD      last_update DATETIME    6
     """                                
 
+    # @FIELD @OVERRIDE
+    # Use JSON type instead of string
+    content = models.JSONField()
+
     # VC Issuer
     issuer = models.ForeignKey(
         get_user_model(),
