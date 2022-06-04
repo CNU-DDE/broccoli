@@ -30,9 +30,7 @@ class ClaimData(BaseData, models.Model):
     3       REJECTED    VC not issued
     """
     status = models.SmallIntegerField(
-        blank=True,
-        null=True,
-        default=None,
+        default=1,
     )
 
     # Encrypted VC
