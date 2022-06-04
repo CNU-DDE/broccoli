@@ -1,12 +1,6 @@
-from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from ..models import PositionData
-
-# Nested serializer
-class EmployerSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = get_user_model()
-        fields = ["display_name"]
+from .common_serializer import UserDisplayNameSerializer
 
 # Main serializer
 class PositionListSerializer(serializers.ModelSerializer):
@@ -27,5 +21,5 @@ class PositionListSerializer(serializers.ModelSerializer):
     # Recursive formatting
     def to_representation(self, obj):
         resp = super().to_representation(obj)
-        resp['employer'] = EmployerSerializer(obj.owner).data
+        resp['employer'] = UserDisplayNameSerializer(obj.owner).data
         return resp
