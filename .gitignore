@@ -131,3 +131,4 @@ dmypy.json
 # Database stuff
 database/
 migrations/
+curl_test/*.json
