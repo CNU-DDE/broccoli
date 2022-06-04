@@ -10,6 +10,7 @@ from .position_detail_serializer import PositionDetailSerializer
 from .resume_serializer import ResumeSerializer
 
 from .claim_serializer import ClaimSerializer
+from .claim_list_serializer import EmployerClaimListSerializer, EmployeeClaimListSerializer
 
 # Ignore unused
 _ = UserSerializer
@@ -24,3 +25,5 @@ _ = PositionDetailSerializer
 _ = ResumeSerializer
 
 _ = ClaimSerializer
+_ = EmployerClaimListSerializer
+_ = EmployeeClaimListSerializer
