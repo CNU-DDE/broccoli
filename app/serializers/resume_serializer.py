@@ -1,6 +1,7 @@
-from ..models import ResumeData
 from rest_framework import serializers
+from ..models import ResumeData
 
+# Default serializer
 class ResumeSerializer(serializers.ModelSerializer):
     class Meta:
         model = ResumeData

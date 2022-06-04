@@ -9,4 +9,5 @@ urlpatterns = format_suffix_patterns([
     path('position', views.PositionResponse.as_view()),
     path('position/<int:position_id>', views.PositionDetailResponse.as_view()),
     path('claim', views.ClaimResponse.as_view()),
+    path('claim/<int:claim_id>', views.ClaimDetailResponse.as_view()),
 ])

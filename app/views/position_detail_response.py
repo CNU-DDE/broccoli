@@ -1,6 +1,6 @@
-from ..serializers import PositionDetailSerializer
-from ..models import PositionData
 from .. import errors
+from ..models import PositionData
+from ..serializers import PositionDetailSerializer
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -24,12 +24,12 @@ class PositionDetailResponse(APIView):
     @RequestParam:  position_id     Position ID
     @RequestBody:   nil
     """
-    def get(self, request, position_id):
+    def get(self, _, position_id):
         try:
 
             # Generate serializer
             serializer = PositionDetailSerializer(
-                PositionData.objects.filter(pk=position_id).select_related("owner"),
+                PositionData.objects.filter(pk=position_id).select_related("owner"), # type: ignore
                 many=True,
             )
 

@@ -1,10 +1,10 @@
-from ..serializers import UserSerializer
-from ..utils import httputils, cryptoutils, convutils
 from .. import errors
+from ..utils import httputils, cryptoutils, convutils
+from ..serializers import UserSerializer
 
+from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
 
 class UserResponse(APIView):
 

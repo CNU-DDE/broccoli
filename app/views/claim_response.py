@@ -1,11 +1,10 @@
-from .. import serializers
+from .. import serializers, errors
 from ..models import ClaimData
 from ..utils import cryptoutils, modelutils
-from .. import errors
 
+from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
 
 class ClaimResponse(APIView):
 
@@ -95,14 +94,14 @@ class ClaimResponse(APIView):
             # For employee
             if modelutils.is_employee(did):
                 serializer = serializers.EmployeeClaimListSerializer(
-                    ClaimData.objects.filter(owner = did),
+                    ClaimData.objects.filter(owner = did), # type: ignore
                     many=True,
                 )
 
             # For employer
             else:
                 serializer = serializers.EmployerClaimListSerializer(
-                    ClaimData.objects.filter(issuer = did),
+                    ClaimData.objects.filter(issuer = did), # type: ignore
                     many=True,
                 )
 

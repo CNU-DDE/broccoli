@@ -1,11 +1,11 @@
-from ..serializers import CLSerializer, CLListSerializer
-from ..utils import cryptoutils, modelutils
 from .. import errors
+from ..utils import cryptoutils, modelutils
 from ..models import CLData
+from ..serializers import CLSerializer, CLListSerializer
 
+from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
 
 class CoverLetterResponse(APIView):
 
@@ -93,7 +93,7 @@ class CoverLetterResponse(APIView):
 
             # Generate serializer
             serializer = CLListSerializer(
-                CLData.objects.filter(owner = did),
+                CLData.objects.filter(owner = did), # type: ignore
                 many=True
             )
             return self.gen_get_response(serializer.data)
