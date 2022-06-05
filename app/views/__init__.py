@@ -6,3 +6,4 @@ from .position_detail_response  import *
 from .claim_response            import *
 from .claim_detail_response     import *
 from .resume_response           import *
+from .resume_detail_response    import *

@@ -12,4 +12,5 @@ urlpatterns = format_suffix_patterns([
     path('claim/<int:claim_id>', views.ClaimDetailResponse.as_view()),
     path('resume', views.ResumeResponse.as_view()),
     path('resume/all', views.ResumeAllResponse.as_view()),
+    path('resume/<int:resume_id>', views.ResumeDetailResponse.as_view()),
 ])
