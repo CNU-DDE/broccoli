@@ -1,9 +1,19 @@
 from .. import serializers, errors
 from ..utils import cryptoutils, modelutils, httputils
+from ..models import ResumeData
 
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
+
+def gen_get_response(resume_list, code=status.HTTP_200_OK, err=None):
+    return Response(
+        {
+            "error": err,
+            "resumes": resume_list,
+        },
+        status=code,
+    )
 
 class ResumeResponse(APIView):
 
@@ -16,16 +26,6 @@ class ResumeResponse(APIView):
             status=code,
         )
 
-    #  @staticmethod
-    #  def gen_get_response(claim_list, code=status.HTTP_200_OK, err=None):
-    #      return Response(
-    #          {
-    #              "error": err,
-    #              "claims": claim_list,
-    #          },
-    #          status=code,
-    #      )
-    #
     """
     [POST] /api/resume
     @PathVariable: nil
@@ -127,3 +127,31 @@ class ResumeResponse(APIView):
     #      # Unknown error
     #      except Exception as err:
     #          return errors.UnhandledError(err).gen_response()
+
+class ResumeAllResponse(APIView):
+
+    """
+    [GET] /api/resume/all
+    @PathVariable: nil
+    @RequestParam: nil
+    @RequestBody: nil
+    """
+    def get(self, _):
+        try:
+
+            # Generate serializer
+            serializer = serializers.ResumeDisplaySerializer(
+                ResumeData.objects.all(), # type: ignore
+                many=True,
+            )
+
+            # Response
+            return gen_get_response(serializer.data)
+
+        # Handle all known error
+        except errors.BaseError as err:
+            return err.gen_response()
+
+        # Unknown error
+        except Exception as err:
+            return errors.UnhandledError(err).gen_response()
