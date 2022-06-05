@@ -1,7 +1,4 @@
-import hashlib
-import json
-import jwt
-import time
+import hashlib, json, jwt, time, ecies, base64
 from django.conf import settings
 from ..errors import JWTValidationError
 
@@ -27,3 +24,6 @@ def verify_JWT(token):
         return jwt.decode(token, settings.JWT_SECR, algorithms=[settings.JWT_ALGO])["sub"]
     except jwt.exceptions.InvalidTokenError as err:
         raise JWTValidationError(err)
+
+def secp256k1_encrypt(hex_pubkey, plain):
+    return base64.b64encode(ecies.encrypt(hex_pubkey, plain.encode())).decode("ASCII")
