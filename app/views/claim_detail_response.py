@@ -19,7 +19,7 @@ class ClaimDetailResponse(APIView):
         )
 
     @staticmethod
-    def gen_patch_response(code=status.HTTP_201_CREATED, err=None):
+    def gen_patch_response(code=status.HTTP_200_OK, err=None):
         return Response(
             {
                 "error": err,
