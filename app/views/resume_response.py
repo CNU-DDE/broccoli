@@ -88,45 +88,61 @@ class ResumeResponse(APIView):
             return errors.UnhandledError(err).gen_response()
 
     """
-    [GET] /api/claim
+    [GET] /api/resume?position=:position_id
     @PathVariable: nil
-    @RequestParam: nil
+    @RequestParam: position_id      Position ID
     @RequestBody: nil
     """
-    #  def get(self, request):
-    #      try:
-    #          # Check login
-    #          if "access_token" not in request.COOKIES:
-    #              raise errors.AuthorizationFailedError("Access token not exists")
-    #          did = cryptoutils.verify_JWT(request.COOKIES["access_token"])
-    #
-    #          # Generate serializer
-    #          serializer = None
-    #
-    #          # For employee
-    #          if modelutils.is_employee(did):
-    #              serializer = serializers.EmployeeClaimListSerializer(
-    #                  ClaimData.objects.filter(owner = did), # type: ignore
-    #                  many=True,
-    #              )
-    #
-    #          # For employer
-    #          else:
-    #              serializer = serializers.EmployerClaimListSerializer(
-    #                  ClaimData.objects.filter(issuer = did), # type: ignore
-    #                  many=True,
-    #              )
-    #
-    #          # Response
-    #          return self.gen_get_response(serializer.data)
-    #
-    #      # Handle all known error
-    #      except errors.BaseError as err:
-    #          return err.gen_response()
-    #
-    #      # Unknown error
-    #      except Exception as err:
-    #          return errors.UnhandledError(err).gen_response()
+    def get(self, request):
+        try:
+            # Check login
+            if "access_token" not in request.COOKIES:
+                raise errors.AuthorizationFailedError("Access token not exists")
+            did = cryptoutils.verify_JWT(request.COOKIES["access_token"])
+
+            # Generate serializer
+            serializer = None
+
+            # For employee
+            if modelutils.is_employee(did):
+
+                serializer = serializers.ResumeDisplaySerializer(
+                    # Resume owner is myself
+                    ResumeData.objects.filter(owner=did), # type: ignore
+                    many=True,
+                )
+
+            # When employer inquires about the resumes for a position
+            elif "position" in request.query_params:
+
+                serializer = serializers.ResumeDisplaySerializer(
+                    # Resume verifier is myself
+                    # And position id matches
+                    ResumeData.objects.filter( # type: ignore
+                        verifier=did,
+                        position=int(request.query_params["position"]),
+                    ),
+                    many=True,
+                )
+
+            # For employer
+            else:
+                serializer = serializers.ResumeDisplaySerializer(
+                    # Resume verifier is myself
+                    ResumeData.objects.filter(verifier=did), # type: ignore
+                    many=True,
+                )
+
+            # Response
+            return gen_get_response(serializer.data)
+
+        # Handle all known error
+        except errors.BaseError as err:
+            return err.gen_response()
+
+        # Unknown error
+        except Exception as err:
+            return errors.UnhandledError(err).gen_response()
 
 class ResumeAllResponse(APIView):
 
