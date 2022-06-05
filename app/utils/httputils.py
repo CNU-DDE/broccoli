@@ -11,7 +11,7 @@ def did_get_req(path, req_param=None):
     return body['content']
 
 def did_post_req(path, req_body):
-    res = requests.get(f"http://{settings.DID_HOST}:{settings.DID_PORT}{path}", json=req_body)
+    res = requests.post(f"http://{settings.DID_HOST}:{settings.DID_PORT}{path}", json=req_body)
     body = json.loads(res.text)
     if res.status_code >= 400 or body['error'] is not None:
         raise DIDReqError(res.status_code, body['error'])
