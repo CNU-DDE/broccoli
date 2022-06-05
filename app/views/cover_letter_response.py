@@ -23,7 +23,7 @@ class CoverLetterResponse(APIView):
         return Response(
             {
                 "error": err,
-                "cover-letters": cl_list,
+                "cover_letters": cl_list,
             },
             status=code,
         )
@@ -52,7 +52,7 @@ class CoverLetterResponse(APIView):
             serializer = CLSerializer(data = {
                 "owner": did,
                 "title": request.data["title"],
-                "content": request.data["cover-letter"],
+                "content": request.data["cover_letter"],
             })
 
             # Validation

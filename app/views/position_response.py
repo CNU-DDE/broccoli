@@ -35,11 +35,11 @@ class PositionResponse(APIView):
     @RequestBody: {
         "title":                    string
         "content":                  string
-        "employment-period":        string
-        "working-time":             string
-        "payment-interval-type":    string
-        "payment-per-interval":     string
-        "hiring-number":            string
+        "employment_period":        string
+        "working_time":             string
+        "payment_interval_type":    string
+        "payment_per_interval":     string
+        "hiring_number":            string
     }
     """
     def post(self, request):
@@ -58,11 +58,11 @@ class PositionResponse(APIView):
                 "owner": did,
                 "title":                    request.data["title"],
                 "content":                  request.data["content"],
-                "employment_period":        request.data["employment-period"],
-                "working_time":             request.data["working-time"],
-                "payment_interval_type":    request.data["payment-interval-type"],
-                "payment_per_interval":     request.data["payment-per-interval"],
-                "hiring_number":            request.data["hiring-number"],
+                "employment_period":        request.data["employment_period"],
+                "working_time":             request.data["working_time"],
+                "payment_interval_type":    request.data["payment_interval_type"],
+                "payment_per_interval":     request.data["payment_per_interval"],
+                "hiring_number":            request.data["hiring_number"],
             })
 
             # Validation
