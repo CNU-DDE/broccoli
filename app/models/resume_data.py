@@ -6,12 +6,16 @@ from .position_data import PositionData
 class ResumeData(BaseData, models.Model):
     """
     INHERITED:
-    @PRIMARY    id          BIGINT      20 
-    @FOREIGN    owner       VARCHAR     72 
-    @FIELD      title       VARCHAR     128 
-    @FIELD      content     TEXT        65535 
+    @PRIMARY    id          BIGINT      20
+    @FOREIGN    owner       VARCHAR     72
+    @FIELD      title       VARCHAR     128
+    @FIELD      content     TEXT        65535
     @FIELD      last_update DATETIME    6
-    """                                
+    """
+
+    # @FIELD @OVERRIDE
+    # Use JSON type instead of string
+    content = models.JSONField()
 
     # Resume verifier
     verifier = models.ForeignKey(
