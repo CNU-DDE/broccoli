@@ -24,8 +24,8 @@ class UserResponse(APIView):
     @RequestParam: nil
     @RequestBody: {
         password:       string,
-        isEmployee:     bool,
-        displayName:    string,
+        is_employee:    bool,
+        display_name:   string,
         birth:          string | null,
         address:        string,
         contact:        string,
@@ -47,8 +47,8 @@ class UserResponse(APIView):
             serializer = UserSerializer(data = {
                 "did": keystore["did"],
                 "password": password,
-                "user_type": convutils.user_type(request.data["isEmployee"]),
-                "display_name": request.data["displayName"],
+                "user_type": convutils.user_type(request.data["is_employee"]),
+                "display_name": request.data["display_name"],
                 "birth": request.data["birth"],
                 "address": request.data["address"],
                 "contact": request.data["contact"],

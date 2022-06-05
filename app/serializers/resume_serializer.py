@@ -1,8 +1,7 @@
 from rest_framework import serializers
 
-from . import user_serializer, CL_serializer
-from ..models import ResumeData, CLData
-from ..utils.httputils import did_post_req
+from . import user_serializer
+from ..models import ResumeData
 
 # Default serializer
 class ResumeSerializer(serializers.ModelSerializer):
@@ -58,7 +57,7 @@ class ResumeDetailSerializer(serializers.ModelSerializer):
             resp["verifier"] = None
 
         # Save cover letter list to process on view-level
-        resp["cover_letters"] = obj.content["cover-letters"]
+        resp["cover_letters"] = obj.content["cover_letters"]
 
         # Save VP to process on view-level
         resp["careers"] = obj.content["careers"]

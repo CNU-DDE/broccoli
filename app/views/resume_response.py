@@ -33,7 +33,7 @@ class ResumeResponse(APIView):
     @RequestBody: {
         keystore:           { did: string, walletAddress: string, privKey: string, pubKey: string }
         title:              string
-        cover-letter-ids:   []int
+        cover_letter_ids:   []int
         carears:            []string
     }
     """
@@ -57,7 +57,7 @@ class ResumeResponse(APIView):
 
             # Generate resume
             content = {
-                "cover-letters": request.data["cover-letter-ids"],
+                "cover_letters": request.data["cover_letter_ids"],
                 "careers": vp,
             }
 
@@ -89,9 +89,9 @@ class ResumeResponse(APIView):
 
     """
     [GET] /api/resume?position=:position_id
-    @PathVariable: nil
-    @RequestParam: position_id      Position ID
-    @RequestBody: nil
+    @PathVariable:  nil
+    @RequestParam:  position_id      Position ID
+    @RequestBody:   nil
     """
     def get(self, request):
         try:
