@@ -1,0 +1,42 @@
+version: "3.9"
+
+services:
+  db:
+    container_name: mariadb
+    image: mariadb:10.8.2-rc-focal
+    volumes:
+      - mrdata:/var/lib/mysql
+    environment:
+      - "MARIADB_ROOT_PASSWORD=${MARIADB_ROOT_PASSWORD}"
+      - "MARIADB_USER=${MARIADB_USER}"
+      - "MARIADB_PASSWORD=${MARIADB_PASSWORD}"
+      - "MARIADB_DATABASE=${MARIADB_DATABASE}"
+    ports:
+      - 3306:3306
+  did-core:
+    container_name: did-core
+    image: haeramkeem/did-core
+    environment: []
+    ports:
+      - 7771:7771
+  web:
+    container_name: broccoli
+    image: haeramkeem/broccoli
+    environment:
+      - "MARIADB_HOST=db"
+      - "MARIADB_PORT=3306"
+      - "MARIADB_USER=${MARIADB_USER}"
+      - "MARIADB_PASSWORD=${MARIADB_PASSWORD}"
+      - "MARIADB_DATABASE=${MARIADB_DATABASE}"
+      - "RUNMODE=production"
+      - "DID_HOST=did-core"
+      - "DID_PORT=7771"
+      - "JWT_SECR=${JWT_SECR}"
+      - "FE_HOST=${FE_HOST}"
+    ports:
+      - 7772:7772
+    depends_on:
+      - db
+      - did-core
+volumes:
+  mrdata:
