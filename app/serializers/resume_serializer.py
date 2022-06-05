@@ -25,4 +25,8 @@ class ResumeDisplaySerializer(serializers.ModelSerializer):
     def to_representation(self, obj):
         resp = super().to_representation(obj)
         resp["holder"] = UserDisplayNameSerializer(obj.owner).data
+        if obj.verifier:
+            resp["verifier"] = UserDisplayNameSerializer(obj.verifier).data
+        else:
+            resp["verifier"] = None
         return resp
