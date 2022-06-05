@@ -1,3 +1,4 @@
+import sys, traceback
 from rest_framework import status
 from rest_framework.response import Response
 from .utils.convutils import error_message
@@ -8,6 +9,7 @@ class BaseError(Exception):
         self.message = str(message)
         super().__init__(message)
     def gen_response(self):
+        print(traceback.format_exc(), file=sys.stderr)
         return Response({ "error": self.message }, status=self.status_code)
 
 class DIDReqError(BaseError):
@@ -32,4 +34,5 @@ class ClientFaultError(BaseError):
 
 class UnhandledError(BaseError):
     def __init__(self, err):
+        print(sys.exc_info()[2], file=sys.stderr)
         super().__init__(status.HTTP_500_INTERNAL_SERVER_ERROR, error_message(err))
