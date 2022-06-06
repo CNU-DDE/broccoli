@@ -6,3 +6,6 @@ def user_type(is_employee):
 
 def error_message(err):
     return f"Unexpected error {err} with error type {type(err)}"
+
+def public_key(did):
+    return did.split(":")[-1]
