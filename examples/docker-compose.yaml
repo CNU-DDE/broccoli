@@ -34,6 +34,8 @@ services:
       - "DID_PORT=7771"
       - "JWT_SECR=${JWT_SECR}"
       - "FE_HOST=${FE_HOST}"
+      - "CORS_ALLOWED_HOST=${CORS_ALLOWED_HOST}"
+      - "CORS_ALLOWED_LOCAL_PORT=${CORS_ALLOWED_LOCAL_PORT}"
     ports:
         - ${FE_PORT}:7772
     depends_on:
