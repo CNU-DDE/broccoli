@@ -20,5 +20,12 @@ services:
     container_name: phpmyadmin
     ports:
       - 60080:80
+  did-core:
+    image: haeramkeem/did-core
+    container_name: did-core
+    ports:
+      - 7771:7771
+    environment:
+      - "INFURA_PID=${INFURA_PID}"
 volumes:
   mrdata:

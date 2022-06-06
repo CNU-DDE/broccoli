@@ -1,5 +1,5 @@
 from .. import errors, serializers
-from ..utils import cryptoutils, modelutils, httputils
+from ..utils import cryptoutils, modelutils, httputils, convutils
 from ..models import ClaimData
 
 from rest_framework import status
@@ -116,7 +116,10 @@ class ClaimDetailResponse(APIView):
                 # Get encrypted VC
                 # For safety, a generated VC is stored with SECP256K1 algorithm,
                 # which is used by Ethereum.
-                enc_vc = cryptoutils.secp256k1_encrypt(keystore["pubKey"], vc)
+                enc_vc = cryptoutils.secp256k1_encrypt(
+                    convutils.public_key(claim_data["owner"]),
+                    vc,
+                )
 
                 # Generate serializer
                 serializer = serializers.ClaimSerializer(

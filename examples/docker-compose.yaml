@@ -34,7 +34,7 @@ services:
       - "JWT_SECR=${JWT_SECR}"
       - "FE_HOST=${FE_HOST}"
     ports:
-      - 7772:7772
+        - ${FE_PORT}:7772
     depends_on:
       - db
       - did-core
