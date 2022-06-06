@@ -16,7 +16,8 @@ services:
   did-core:
     container_name: did-core
     image: haeramkeem/did-core
-    environment: []
+    environment:
+      - "INFURA_PID=${INFURA_PID}"
     ports:
       - 7771:7771
   web:

@@ -19,6 +19,8 @@ JWT_EXPR = 7200 # JWT expires after 2 hours
 JWT_ALGO = "HS256"
 
 FE_HOST = os.environ["FE_HOST"]
+CORS_ALLOWED_HOST = os.environ["CORS_ALLOWED_HOST"]
+CORS_ALLOWED_LOCAL_PORT = os.environ["CORS_ALLOWED_LOCAL_PORT"]
 
 """
 Django settings for config project.
@@ -64,11 +66,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'corsheaders',
     'rest_framework',
     'app',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -156,3 +160,11 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# CORS configuration
+CORS_ORIGIN_WHITELIST = [
+    'http://127.0.0.1:' + CORS_ALLOWED_LOCAL_PORT,
+    'http://localhost:' + CORS_ALLOWED_LOCAL_PORT,
+    CORS_ALLOWED_HOST,
+]
+CORS_ALLOW_CREDENTIALS = True
