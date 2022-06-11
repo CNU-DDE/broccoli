@@ -1,32 +1,13 @@
 from .. import errors
 from ..utils import cryptoutils, modelutils
 from ..models import PositionData
-from ..serializers import PositionListSerializer, PositionSerializer
+from ..serializers.position_serializer import *
 
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
 class PositionResponse(APIView):
-
-    @staticmethod
-    def gen_post_response(code=status.HTTP_201_CREATED, err=None):
-        return Response(
-            {
-                "error": err,
-            },
-            status=code,
-        )
-
-    @staticmethod
-    def gen_get_response(pos_list, code=status.HTTP_200_OK, err=None):
-        return Response(
-            {
-                "error": err,
-                "positions": pos_list,
-            },
-            status=code,
-        )
 
     """
     [POST] /api/position
@@ -42,6 +23,16 @@ class PositionResponse(APIView):
         "hiring_number":            string
     }
     """
+    @staticmethod
+    def gen_post_response(code=status.HTTP_201_CREATED, err=None):
+        return Response(
+            {
+                "error": err,
+            },
+            status=code,
+        )
+
+
     def post(self, request):
         try:
             # Check login
@@ -90,13 +81,20 @@ class PositionResponse(APIView):
     @RequestParam: nil
     @RequestBody: nil
     """
-    def get(self, request):
-        try:
-            # Ignore unused
-            _ = request
+    @staticmethod
+    def gen_get_response(pos_list, code=status.HTTP_200_OK, err=None):
+        return Response(
+            {
+                "error": err,
+                "positions": pos_list,
+            },
+            status=code,
+        )
 
+    def get(self, _):
+        try:
             # Generate serializer
-            serializer = PositionListSerializer(
+            serializer = PositionMinimumSerializer(
                 PositionData.objects.all().select_related("owner"), # type: ignore
                 many=True,
             )

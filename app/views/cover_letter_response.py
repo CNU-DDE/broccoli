@@ -1,32 +1,13 @@
 from .. import errors
 from ..utils import cryptoutils, modelutils
 from ..models import CLData
-from ..serializers import CLSerializer, CLListSerializer
+from ..serializers import CLSerializer, CLMinimumSerializer
 
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
 class CoverLetterResponse(APIView):
-
-    @staticmethod
-    def gen_post_response(code=status.HTTP_201_CREATED, err=None):
-        return Response(
-            {
-                "error": err,
-            },
-            status=code,
-        )
-
-    @staticmethod
-    def gen_get_response(cl_list, code=status.HTTP_200_OK, err=None):
-        return Response(
-            {
-                "error": err,
-                "cover_letters": cl_list,
-            },
-            status=code,
-        )
 
     """
     [POST] /api/cover-letter
@@ -37,6 +18,15 @@ class CoverLetterResponse(APIView):
         cover-letter:   string
     }
     """
+    @staticmethod
+    def gen_post_response(code=status.HTTP_201_CREATED, err=None):
+        return Response(
+            {
+                "error": err,
+            },
+            status=code,
+        )
+
     def post(self, request):
         try:
             # Check login
@@ -80,6 +70,16 @@ class CoverLetterResponse(APIView):
     @RequestParam: nil
     @RequestBody: nil
     """
+    @staticmethod
+    def gen_get_response(cl_list, code=status.HTTP_200_OK, err=None):
+        return Response(
+            {
+                "error": err,
+                "cover_letters": cl_list,
+            },
+            status=code,
+        )
+
     def get(self, request):
         try:
             # Check login
@@ -92,7 +92,7 @@ class CoverLetterResponse(APIView):
                 raise errors.PermissionDeniedError()
 
             # Generate serializer
-            serializer = CLListSerializer(
+            serializer = CLMinimumSerializer(
                 CLData.objects.filter(owner = did), # type: ignore
                 many=True
             )

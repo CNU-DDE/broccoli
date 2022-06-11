@@ -2,42 +2,35 @@ from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
 # Default serializer
+# @bind: [POST] new user
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()
         fields = '__all__'
 
-# Display name only serializer
-class UserDisplayNameSerializer(serializers.ModelSerializer):
+# User minimal only serializer
+class UserMinimumSerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()
-        fields = ["display_name"]
-
-# DID and display name for employer
-class EmployerDIDSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = get_user_model()
-        fields = ["did", "display_name"]
+        fields = (
+            "did",
+            "display_name",
+        )
 
 # Human readable serializer for employer
-class EmployerReadableSerializer(serializers.ModelSerializer):
+class EmployerReadableSerializer(UserMinimumSerializer):
     class Meta:
         model = get_user_model()
-        fields = [
-            "display_name",
+        fields = UserMinimumSerializer.Meta.fields + (
             "contact",
             "email",
             "address",
-        ]
+        )
 
 # Human readable serializer for employee
-class EmployeeReadableSerializer(serializers.ModelSerializer):
+class EmployeeReadableSerializer(EmployerReadableSerializer):
     class Meta:
         model = get_user_model()
-        fields = [
-            "display_name",
-            "contact",
-            "email",
-            "address",
+        fields = EmployerReadableSerializer.Meta.fields + (
             "birth",
-        ]
+        )

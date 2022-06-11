@@ -1,22 +1,13 @@
 from .. import errors
 from ..utils import httputils, cryptoutils, convutils
-from ..serializers import UserSerializer
+from ..models import User
+from ..serializers import UserSerializer, UserMinimumSerializer
 
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
 class UserResponse(APIView):
-
-    @staticmethod
-    def send_response(keystore, code=status.HTTP_201_CREATED, err=None):
-        return Response(
-            {
-                "error": err,
-                "keystore": keystore,
-            },
-            status=code,
-        )
 
     """
     [POST] /api/user
@@ -32,6 +23,16 @@ class UserResponse(APIView):
         email:          string
     }
     """
+    @staticmethod
+    def gen_post_response(keystore, code=status.HTTP_201_CREATED, err=None):
+        return Response(
+            {
+                "error": err,
+                "keystore": keystore,
+            },
+            status=code,
+        )
+
     def post(self, request):
         try:
             # Get keystore
@@ -63,7 +64,7 @@ class UserResponse(APIView):
 
             # Response
             serializer.save()
-            return self.send_response(keystore)
+            return self.gen_post_response(keystore)
 
         # Handle all known error
         except errors.BaseError as err:
@@ -73,5 +74,51 @@ class UserResponse(APIView):
             return errors.ClientFaultError("Wrong sign in form").gen_response()
 
         # Unknown error
+        except Exception as err:
+            return errors.UnhandledError(err).gen_response()
+
+    """
+    [GET] /api/user?type=:user_type
+    @PathVariable:  nil
+    @RequestParam:  nil
+    @RequestBody:   nil
+    """
+    @staticmethod
+    def gen_get_response(employers, code=status.HTTP_200_OK, err=None):
+        return Response(
+            {
+                "error": err,
+                "users": employers,
+            },
+            status=code,
+        )
+
+    def get(self, request):
+        try:
+
+            # SELECT all employers
+            qp = request.query_params
+            users = None
+
+            if "type" in qp:
+                users = User.objects.filter(user_type = int(qp["type"]))
+            else:
+                users = User.objects.all()
+
+            serializer = UserMinimumSerializer(
+                users,
+                many = True,
+            )
+
+            return self.gen_get_response(serializer.data)
+
+        # Handle all known error
+        except errors.BaseError as err:
+            return err.gen_response()
+
+        except KeyError as err:
+            return errors.ClientFaultError(err).gen_response()
+
+        # Handle unhandled error
         except Exception as err:
             return errors.UnhandledError(err).gen_response()

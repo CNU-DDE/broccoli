@@ -7,8 +7,20 @@ class CLSerializer(serializers.ModelSerializer):
         model = CLData
         fields = '__all__'
 
-# List serializer
-class CLListSerializer(serializers.ModelSerializer):
+# CL minimum serializer
+class CLMinimumSerializer(serializers.ModelSerializer):
     class Meta:
         model = CLData
-        fields = ["id", "title", "content"]
+        fields = (
+            "id",
+            "owner",
+            "title",
+        )
+
+# CL detail serializer
+class CLDetailSerializer(CLMinimumSerializer):
+    class Meta:
+        model = CLData
+        fields = CLMinimumSerializer.Meta.fields + (
+            "content",
+        )

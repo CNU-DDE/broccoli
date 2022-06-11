@@ -8,15 +8,6 @@ from rest_framework.response import Response
 
 class UserTokenResponse(APIView):
 
-    @staticmethod
-    def send_response(code=status.HTTP_200_OK, err=None):
-        return Response(
-            {
-                "error": err,
-            },
-            status=code,
-        )
-
     """
     [POST] /api/user/token
     @PathVariable: nil
@@ -25,8 +16,16 @@ class UserTokenResponse(APIView):
         password:   string,
         keystore:   { did: string, walletAddress: string, privKey: string, pubKey: string }
     }
-    TODO: This might not work due to CORS and CSRF problem
     """
+    @staticmethod
+    def gen_post_response(code=status.HTTP_200_OK, err=None):
+        return Response(
+            {
+                "error": err,
+            },
+            status=code,
+        )
+
     def post(self, request):
         try:
             # Get keystore
@@ -49,7 +48,7 @@ class UserTokenResponse(APIView):
                 raise errors.AuthorizationFailedError("User not found")
 
             # Validate: User found
-            res = self.send_response()
+            res = self.gen_post_response()
             res.set_cookie(
                 "access_token",
                 cryptoutils.gen_JWT(keystore["did"]),

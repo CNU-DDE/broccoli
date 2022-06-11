@@ -2,12 +2,18 @@ from .. import errors
 from ..models import PositionData
 from ..serializers import PositionDetailSerializer
 
+from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
 
-class PositionDetailResponse(APIView):
+class PositionIDResponse(APIView):
 
+    """
+    [GET] /api/position/:position_id
+    @PathVariable:  nil
+    @RequestParam:  position_id     Position ID
+    @RequestBody:   nil
+    """
     @staticmethod
     def gen_get_response(position, code=status.HTTP_200_OK, err=None):
         return Response(
@@ -18,26 +24,14 @@ class PositionDetailResponse(APIView):
             status=code,
         )
 
-    """
-    [GET] /api/position/:position_id
-    @PathVariable:  nil
-    @RequestParam:  position_id     Position ID
-    @RequestBody:   nil
-    """
     def get(self, _, position_id):
         try:
 
             # Generate serializer
             serializer = PositionDetailSerializer(
-                PositionData.objects.filter(pk=position_id).select_related("owner"), # type: ignore
-                many=True,
+                PositionData.objects.get(pk=position_id), # type: ignore
             )
-
-            # Response just one
-            if len(serializer.data) == 1:
-                return self.gen_get_response(serializer.data[0])
-            else:
-                return self.gen_get_response({})
+            return self.gen_get_response(serializer.data)
 
         # Handle all known error
         except errors.BaseError as err:
