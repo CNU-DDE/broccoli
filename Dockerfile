@@ -2,8 +2,8 @@ FROM python:3.8-slim
 
 LABEL name="Haeram Kim"
 LABEL email="haeram.kim1@gmail.com"
-LABEL image_version="1.0.0"
-LABEL app_version="1.0.0"
+LABEL image_version="0.2.0"
+LABEL app_version="0.2.0"
 LABEL description="Injik/broccoli API server image"
 
 ENV VAR1=10
