@@ -9,7 +9,7 @@ from rest_framework.response import Response
 class UserResponse(APIView):
 
     @staticmethod
-    def send_response(keystore, code=status.HTTP_201_CREATED, err=None):
+    def gen_post_response(keystore, code=status.HTTP_201_CREATED, err=None):
         return Response(
             {
                 "error": err,
@@ -63,7 +63,7 @@ class UserResponse(APIView):
 
             # Response
             serializer.save()
-            return self.send_response(keystore)
+            return self.gen_post_response(keystore)
 
         # Handle all known error
         except errors.BaseError as err:

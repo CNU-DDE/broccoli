@@ -10,7 +10,7 @@ from rest_framework.response import Response
 class UserEmployerResponse(APIView):
 
     @staticmethod
-    def send_response(employers, code=status.HTTP_200_OK, err=None):
+    def gen_get_response(employers, code=status.HTTP_200_OK, err=None):
         return Response(
             {
                 "error": err,
@@ -34,7 +34,7 @@ class UserEmployerResponse(APIView):
                 many = True,
             )
 
-            return self.send_response(serializer.data)
+            return self.gen_get_response(serializer.data)
 
         # Handle all known error
         except errors.BaseError as err:

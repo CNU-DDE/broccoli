@@ -9,7 +9,7 @@ from rest_framework.response import Response
 class UserTokenResponse(APIView):
 
     @staticmethod
-    def send_response(code=status.HTTP_200_OK, err=None):
+    def gen_post_response(code=status.HTTP_200_OK, err=None):
         return Response(
             {
                 "error": err,
@@ -49,7 +49,7 @@ class UserTokenResponse(APIView):
                 raise errors.AuthorizationFailedError("User not found")
 
             # Validate: User found
-            res = self.send_response()
+            res = self.gen_post_response()
             res.set_cookie(
                 "access_token",
                 cryptoutils.gen_JWT(keystore["did"]),

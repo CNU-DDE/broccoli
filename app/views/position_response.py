@@ -90,11 +90,8 @@ class PositionResponse(APIView):
     @RequestParam: nil
     @RequestBody: nil
     """
-    def get(self, request):
+    def get(self, _):
         try:
-            # Ignore unused
-            _ = request
-
             # Generate serializer
             serializer = PositionMinimumSerializer(
                 PositionData.objects.all().select_related("owner"), # type: ignore
