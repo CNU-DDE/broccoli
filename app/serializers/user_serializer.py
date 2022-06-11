@@ -2,6 +2,7 @@ from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
 # Default serializer
+# @bind: [POST] new user
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()
@@ -11,33 +12,32 @@ class UserSerializer(serializers.ModelSerializer):
 class UserDisplayNameSerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()
-        fields = ["display_name"]
+        fields = ("display_name",)
 
 # DID and display name for employer
-class EmployerDIDSerializer(serializers.ModelSerializer):
+class UserPublicKeySerializer(UserDisplayNameSerializer):
     class Meta:
         model = get_user_model()
-        fields = ["did", "display_name"]
+        fields = UserDisplayNameSerializer.Meta.fields + (
+            "did",
+            "public_key",
+            "wallet_address",
+        )
 
 # Human readable serializer for employer
-class EmployerReadableSerializer(serializers.ModelSerializer):
+class EmployerReadableSerializer(UserDisplayNameSerializer):
     class Meta:
         model = get_user_model()
-        fields = [
-            "display_name",
+        fields = UserDisplayNameSerializer.Meta.fields + (
             "contact",
             "email",
             "address",
-        ]
+        )
 
 # Human readable serializer for employee
-class EmployeeReadableSerializer(serializers.ModelSerializer):
+class EmployeeReadableSerializer(EmployerReadableSerializer):
     class Meta:
         model = get_user_model()
-        fields = [
-            "display_name",
-            "contact",
-            "email",
-            "address",
+        fields = EmployerReadableSerializer.Meta.fields + (
             "birth",
-        ]
+        )
