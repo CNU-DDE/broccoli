@@ -50,7 +50,10 @@ class UserTokenResponse(APIView):
 
             # Validate: User found
             res = self.send_response()
-            res.set_cookie("access_token", cryptoutils.gen_JWT(keystore["did"]))
+            res.set_cookie(
+                "access_token",
+                cryptoutils.gen_JWT(keystore["did"]),
+            )
             return res
 
         # Handle all known error
