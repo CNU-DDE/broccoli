@@ -8,6 +8,15 @@ from rest_framework.response import Response
 
 class UserTokenResponse(APIView):
 
+    """
+    [POST] /api/user/token
+    @PathVariable: nil
+    @RequestParam: nil
+    @RequestBody: {
+        password:   string,
+        keystore:   { did: string, walletAddress: string, privKey: string, pubKey: string }
+    }
+    """
     @staticmethod
     def gen_post_response(code=status.HTTP_200_OK, err=None):
         return Response(
@@ -17,16 +26,6 @@ class UserTokenResponse(APIView):
             status=code,
         )
 
-    """
-    [POST] /api/user/token
-    @PathVariable: nil
-    @RequestParam: nil
-    @RequestBody: {
-        password:   string,
-        keystore:   { did: string, walletAddress: string, privKey: string, pubKey: string }
-    }
-    TODO: This might not work due to CORS and CSRF problem
-    """
     def post(self, request):
         try:
             # Get keystore

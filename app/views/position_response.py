@@ -1,32 +1,13 @@
 from .. import errors
 from ..utils import cryptoutils, modelutils
 from ..models import PositionData
-from ..serializers import *
+from ..serializers.position_serializer import *
 
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
 class PositionResponse(APIView):
-
-    @staticmethod
-    def gen_post_response(code=status.HTTP_201_CREATED, err=None):
-        return Response(
-            {
-                "error": err,
-            },
-            status=code,
-        )
-
-    @staticmethod
-    def gen_get_response(pos_list, code=status.HTTP_200_OK, err=None):
-        return Response(
-            {
-                "error": err,
-                "positions": pos_list,
-            },
-            status=code,
-        )
 
     """
     [POST] /api/position
@@ -42,6 +23,16 @@ class PositionResponse(APIView):
         "hiring_number":            string
     }
     """
+    @staticmethod
+    def gen_post_response(code=status.HTTP_201_CREATED, err=None):
+        return Response(
+            {
+                "error": err,
+            },
+            status=code,
+        )
+
+
     def post(self, request):
         try:
             # Check login
@@ -90,47 +81,22 @@ class PositionResponse(APIView):
     @RequestParam: nil
     @RequestBody: nil
     """
+    @staticmethod
+    def gen_get_response(pos_list, code=status.HTTP_200_OK, err=None):
+        return Response(
+            {
+                "error": err,
+                "positions": pos_list,
+            },
+            status=code,
+        )
+
     def get(self, _):
         try:
             # Generate serializer
             serializer = PositionMinimumSerializer(
                 PositionData.objects.all().select_related("owner"), # type: ignore
                 many=True,
-            )
-            return self.gen_get_response(serializer.data)
-
-        # Handle all known error
-        except errors.BaseError as err:
-            return err.gen_response()
-
-        # Unknown error
-        except Exception as err:
-            return errors.UnhandledError(err).gen_response()
-
-class PositionIDResponse(APIView):
-
-    @staticmethod
-    def gen_get_response(position, code=status.HTTP_200_OK, err=None):
-        return Response(
-            {
-                "error": err,
-                "position": position,
-            },
-            status=code,
-        )
-
-    """
-    [GET] /api/position/:position_id
-    @PathVariable:  nil
-    @RequestParam:  position_id     Position ID
-    @RequestBody:   nil
-    """
-    def get(self, _, position_id):
-        try:
-
-            # Generate serializer
-            serializer = PositionDetailSerializer(
-                PositionData.objects.get(pk=position_id), # type: ignore
             )
             return self.gen_get_response(serializer.data)
 

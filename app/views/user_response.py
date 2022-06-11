@@ -9,16 +9,6 @@ from rest_framework.response import Response
 
 class UserResponse(APIView):
 
-    @staticmethod
-    def gen_post_response(keystore, code=status.HTTP_201_CREATED, err=None):
-        return Response(
-            {
-                "error": err,
-                "keystore": keystore,
-            },
-            status=code,
-        )
-
     """
     [POST] /api/user
     @PathVariable: nil
@@ -33,6 +23,16 @@ class UserResponse(APIView):
         email:          string
     }
     """
+    @staticmethod
+    def gen_post_response(keystore, code=status.HTTP_201_CREATED, err=None):
+        return Response(
+            {
+                "error": err,
+                "keystore": keystore,
+            },
+            status=code,
+        )
+
     def post(self, request):
         try:
             # Get keystore
@@ -77,6 +77,12 @@ class UserResponse(APIView):
         except Exception as err:
             return errors.UnhandledError(err).gen_response()
 
+    """
+    [GET] /api/user?type=:user_type
+    @PathVariable:  nil
+    @RequestParam:  nil
+    @RequestBody:   nil
+    """
     @staticmethod
     def gen_get_response(employers, code=status.HTTP_200_OK, err=None):
         return Response(
@@ -87,12 +93,6 @@ class UserResponse(APIView):
             status=code,
         )
 
-    """
-    [GET] /api/user?type=:user_type
-    @PathVariable:  nil
-    @RequestParam:  nil
-    @RequestBody:   nil
-    """
     def get(self, request):
         try:
 

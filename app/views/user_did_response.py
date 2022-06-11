@@ -9,6 +9,12 @@ from rest_framework.response import Response
 
 class UserDIDResponse(APIView):
 
+    """
+    [GET] /api/user/:did
+    @PathVariable:  :did    DID URI
+    @RequestParam:  nil
+    @RequestBody:   nil
+    """
     @staticmethod
     def gen_get_response(user_info, did_doc, code=status.HTTP_201_CREATED, err=None):
         return Response(
@@ -20,12 +26,6 @@ class UserDIDResponse(APIView):
             status=code,
         )
 
-    """
-    [GET] /api/user/:did
-    @PathVariable:  :did    DID URI
-    @RequestParam:  nil
-    @RequestBody:   nil
-    """
     def get(self, _, did):
         try:
 
