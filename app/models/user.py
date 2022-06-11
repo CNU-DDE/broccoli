@@ -6,6 +6,8 @@ class UserManager(BaseUserManager):
             did,
             password,
             user_type,
+            public_key,
+            wallet_address,
             display_name,
             address,
             contact,
@@ -18,6 +20,8 @@ class UserManager(BaseUserManager):
 
         user = self.model(
             did = did,
+            public_key = public_key,
+            wallet_address = wallet_address,
             display_name = display_name,
             address = address,
             contact = contact,
@@ -33,12 +37,14 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, did, display_name, password):
+    def create_superuser(self, did, public_key, wallet_address, display_name, password):
 
         user = self.create_user(
             did = did,
             password = password,
             user_type = 5,
+            public_key = public_key,
+            wallet_address = wallet_address,
             display_name = display_name,
             address = "superuser",
             contact = "superuser",
@@ -66,6 +72,14 @@ class User(AbstractBaseUser):
 
     # Customized
     # Required
+    public_key = models.CharField(
+        max_length=128,
+        unique=True,
+    )
+    wallet_address = models.CharField(
+        max_length=128,
+        unique=True,
+    )
     display_name = models.CharField(
         max_length=64,
     )
