@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from ..models import PositionData
-from .user_serializer import UserDisplayNameSerializer, EmployerReadableSerializer
+from .user_serializer import UserMinimumSerializer, EmployerReadableSerializer
 
 # Default serializer
 class PositionSerializer(serializers.ModelSerializer):
@@ -27,7 +27,7 @@ class PositionMinimumSerializer(serializers.ModelSerializer):
     # Recursive formatting
     def to_representation(self, obj):
         resp = super().to_representation(obj)
-        resp['employer'] = UserDisplayNameSerializer(obj.owner).data
+        resp['employer'] = UserMinimumSerializer(obj.owner).data
         return resp
 
 # Detail serializer

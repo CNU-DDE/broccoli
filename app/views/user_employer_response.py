@@ -1,7 +1,7 @@
 from app.utils.convutils import user_type
 from .. import errors
 from ..models import User
-from ..serializers import UserPublicKeySerializer
+from ..serializers import UserMinimumSerializer
 
 from rest_framework import status
 from rest_framework.views import APIView
@@ -29,7 +29,7 @@ class UserEmployerResponse(APIView):
         try:
 
             # SELECT all employers
-            serializer = UserPublicKeySerializer(
+            serializer = UserMinimumSerializer(
                 User.objects.filter(user_type = user_type(False)),
                 many = True,
             )

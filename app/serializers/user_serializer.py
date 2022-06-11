@@ -8,27 +8,20 @@ class UserSerializer(serializers.ModelSerializer):
         model = get_user_model()
         fields = '__all__'
 
-# Display name only serializer
-class UserDisplayNameSerializer(serializers.ModelSerializer):
+# User minimal only serializer
+class UserMinimumSerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()
-        fields = ("display_name",)
-
-# DID and display name for employer
-class UserPublicKeySerializer(UserDisplayNameSerializer):
-    class Meta:
-        model = get_user_model()
-        fields = UserDisplayNameSerializer.Meta.fields + (
+        fields = (
             "did",
-            "public_key",
-            "wallet_address",
+            "display_name",
         )
 
 # Human readable serializer for employer
-class EmployerReadableSerializer(UserDisplayNameSerializer):
+class EmployerReadableSerializer(UserMinimumSerializer):
     class Meta:
         model = get_user_model()
-        fields = UserDisplayNameSerializer.Meta.fields + (
+        fields = UserMinimumSerializer.Meta.fields + (
             "contact",
             "email",
             "address",
