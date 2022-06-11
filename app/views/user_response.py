@@ -48,6 +48,8 @@ class UserResponse(APIView):
                 "did": keystore["did"],
                 "password": password,
                 "user_type": convutils.user_type(request.data["is_employee"]),
+                "public_key": keystore["pubKey"],
+                "wallet_address": keystore["walletAddress"],
                 "display_name": request.data["display_name"],
                 "birth": request.data["birth"],
                 "address": request.data["address"],

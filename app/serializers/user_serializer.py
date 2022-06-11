@@ -13,6 +13,12 @@ class UserDisplayNameSerializer(serializers.ModelSerializer):
         model = get_user_model()
         fields = ["display_name"]
 
+# DID and display name for employer
+class EmployerDIDSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = get_user_model()
+        fields = ["did", "display_name"]
+
 # Human readable serializer for employer
 class EmployerReadableSerializer(serializers.ModelSerializer):
     class Meta:
