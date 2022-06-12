@@ -1,5 +1,5 @@
 from .. import errors
-from ..utils import httputils, modelutils
+from ..utils import modelutils
 from ..models import User
 from ..serializers.user_serializer import EmployeeReadableSerializer, EmployerReadableSerializer
 
@@ -16,12 +16,11 @@ class UserDIDResponse(APIView):
     @RequestBody:   nil
     """
     @staticmethod
-    def gen_get_response(user_info, did_doc, code=status.HTTP_201_CREATED, err=None):
+    def gen_get_response(user_info, code=status.HTTP_201_CREATED, err=None):
         return Response(
             {
                 "error": err,
                 "user_info": user_info,
-                "did_doc": did_doc,
             },
             status=code,
         )
@@ -41,10 +40,7 @@ class UserDIDResponse(APIView):
                     User.objects.get(pk=did),
                 )
 
-            return self.gen_get_response(
-                serializer.data,
-                httputils.did_get_req("/ssi/did-document/" + did),
-            )
+            return self.gen_get_response(serializer.data)
 
         # Handle all known error
         except errors.BaseError as err:
