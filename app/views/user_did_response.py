@@ -1,7 +1,7 @@
 from .. import errors
-from ..utils import modelutils
+from ..utils import modelutils, cryptoutils
 from ..models import User
-from ..serializers.user_serializer import EmployeeReadableSerializer, EmployerReadableSerializer
+from ..serializers import user_serializer
 
 from rest_framework import status
 from rest_framework.views import APIView
@@ -25,20 +25,24 @@ class UserDIDResponse(APIView):
             status=code,
         )
 
-    def get(self, _, did):
+    def get(self, request, did):
         try:
+
+            # Check login
+            if "access_token" not in request.COOKIES:
+                raise errors.AuthorizationFailedError("Access token not exists")
+            cookie_did = cryptoutils.verify_JWT(request.COOKIES["access_token"])
 
             # Get user info
             # Generate serializer
+            user_obj = User.objects.get(pk=did)
             serializer = None
-            if modelutils.is_employee(did):
-                serializer = EmployeeReadableSerializer(
-                    User.objects.get(pk=did),
-                )
+            if did != cookie_did:
+                serializer = user_serializer.UserMinimumSerializer(user_obj)
+            elif modelutils.is_employee(did):
+                serializer = user_serializer.EmployeeReadableSerializer(user_obj)
             else:
-                serializer = EmployerReadableSerializer(
-                    User.objects.get(pk=did),
-                )
+                serializer = user_serializer.EmployerReadableSerializer(user_obj)
 
             return self.gen_get_response(serializer.data)
 

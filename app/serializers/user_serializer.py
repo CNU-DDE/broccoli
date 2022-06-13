@@ -14,6 +14,7 @@ class UserMinimumSerializer(serializers.ModelSerializer):
         model = get_user_model()
         fields = (
             "did",
+            "user_type",
             "display_name",
         )
 
