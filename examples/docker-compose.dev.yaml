@@ -19,7 +19,7 @@ services:
       - "mariadb:db"
     container_name: phpmyadmin
     ports:
-      - 60080:80
+      - 60079:80
   did-core:
     image: haeramkeem/did-core
     container_name: did-core

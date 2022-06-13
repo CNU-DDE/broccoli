@@ -41,5 +41,6 @@ services:
     depends_on:
       - db
       - did-core
+    restart: always
 volumes:
   mrdata:
