@@ -1,4 +1,4 @@
-import sys, traceback
+import sys
 from rest_framework import status
 from rest_framework.response import Response
 from .utils.convutils import error_message
@@ -9,7 +9,6 @@ class BaseError(Exception):
         self.message = str(message)
         super().__init__(message)
     def gen_response(self):
-        print(traceback.format_exc(), file=sys.stderr)
         return Response({ "error": self.message }, status=self.status_code)
 
 class DIDReqError(BaseError):
