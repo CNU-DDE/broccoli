@@ -6,7 +6,6 @@ from ..serializers import user_serializer
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from django.core.exceptions import ObjectDoesNotExist
 
 class UserDIDResponse(APIView):
 
@@ -36,20 +35,14 @@ class UserDIDResponse(APIView):
 
             # Get user info
             # Generate serializer
-            user_obj = None
-            if did == "self":
-                user_obj = User.objects.get(pk=cookie_did)
-            else:
-                user_obj = User.objects.get(pk=did)
+            did = cookie_did if did == "self" else did
+            user_obj = User.objects.get(pk=did)
 
             serializer = None
-            if did == "self":
-                if modelutils.is_employee(cookie_did):
-                    serializer = user_serializer.EmployeeReadableSerializer(user_obj)
-                else:
-                    serializer = user_serializer.EmployerReadableSerializer(user_obj)
+            if modelutils.is_employee(cookie_did):
+                serializer = user_serializer.EmployeeReadableSerializer(user_obj)
             else:
-                serializer = user_serializer.UserMinimumSerializer(user_obj)
+                serializer = user_serializer.EmployerReadableSerializer(user_obj)
 
             return self.gen_get_response(serializer.data)
 
@@ -60,7 +53,7 @@ class UserDIDResponse(APIView):
         except KeyError as err:
             return errors.ClientFaultError(err).gen_response()
 
-        except ObjectDoesNotExist:
+        except User.DoesNotExist: # type: ignore
             return errors.AuthorizationFailedError().gen_response()
 
         # Handle unhandled error
