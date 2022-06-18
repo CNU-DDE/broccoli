@@ -132,3 +132,6 @@ dmypy.json
 database/
 migrations/
 curl_test/*.json
+
+# Custom
+*.swp

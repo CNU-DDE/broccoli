@@ -16,18 +16,19 @@ You can prepare *MariaDB* and *did-core* with pre-defined
 ## Environment variables
 
 ```bash
-MARIADB_HOST # MariaDB hostname
-MARIADB_PORT # MariaDB port
-MARIADB_USER # MariaDB username
-MARIADB_PASSWORD # MariaDB password
-MARIADB_DATABASE # MariaDB database name
-RUNMODE # Run mode - one of `production` or `development`
-DID_HOST # did-core service hostname
-DID_PORT # did-core service port
-JWT_SECR # JWT signing secret
-FE_HOST # API server frontend host
-CORS_ALLOWED_HOST # CORS allowed origin
-CORS_ALLOWED_LOCAL_PORT # CORS allowed port for `localhost`
+MARIADB_HOST            # MariaDB hostname
+MARIADB_PORT            # MariaDB port
+MARIADB_USER            # MariaDB username
+MARIADB_PASSWORD        # MariaDB password
+MARIADB_DATABASE        # MariaDB database name
+RUNLEVEL                # Run mode - one of `production` or `development`
+DID_HOST                # did-core service hostname
+DID_PORT                # did-core service port
+JWT_SECR                # JWT signing secret
+FE_HOST                 # API server frontend host
+FE_PORT                 # API server frontend host
+ALLOWED_HOST            # Allowed host
+ALLOED_CORS_ORIGIN      # CORS allowed origin
 ```
 
 ## Code development

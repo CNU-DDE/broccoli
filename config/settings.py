@@ -3,26 +3,34 @@ CUSTOM CONSTANTS
 """
 import os
 
+# -------------------------
+# ENVs
+# -------------------------
+# DB
 DB_HOST = os.environ["MARIADB_HOST"]
 DB_PORT = os.environ["MARIADB_PORT"]
 DB_USER = os.environ["MARIADB_USER"]
 DB_PASSWORD = os.environ["MARIADB_PASSWORD"]
 DB_DATABASE = os.environ["MARIADB_DATABASE"]
-
-RUNMODE = os.environ["RUNMODE"]
-
+# Dependency
 DID_HOST = os.environ["DID_HOST"]
 DID_PORT = os.environ["DID_PORT"]
-
+# JWT
 JWT_SECR = os.environ["JWT_SECR"]
+# Frontend
+FE_HOST = os.environ["FE_HOST"]
+FE_PORT = os.environ["FE_PORT"]
+# CORS allowed origin
+ALLOWED_CORS_ORIGIN = os.environ["ALLOWED_CORS_ORIGIN"]
+# Run mode
+RUNLEVEL = os.environ["RUNLEVEL"]
+
+# -------------------------
+# Contants
+# -------------------------
 JWT_EXPR = 7200 # JWT expires after 2 hours
 JWT_ALGO = "HS256"
 API_VERSION = "v0"
-
-FE_HOST = os.environ["FE_HOST"]
-CORS_ALLOWED_HOST = os.environ["CORS_ALLOWED_HOST"]
-CORS_ALLOWED_LOCAL_PORT = os.environ["CORS_ALLOWED_LOCAL_PORT"]
-
 """
 Django settings for config project.
 
@@ -48,15 +56,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-$our&j-f@o1^^_yu#g21z2gg&)3tuj)_56fvq15+n-bg$#&d4)'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = (RUNMODE == 'development')
+DEBUG = (RUNLEVEL == 'development')
 
-ALLOWED_HOSTS = [
-    '127.0.0.1',
-    'localhost',
-    '192.168.35.10',
-    FE_HOST,
-]
-
+ALLOWED_HOSTS = ["*"]
 
 # Application definition
 
@@ -164,9 +166,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # CORS configuration
 CORS_ORIGIN_WHITELIST = [
-    'http://127.0.0.1:' + CORS_ALLOWED_LOCAL_PORT,
-    'http://localhost:' + CORS_ALLOWED_LOCAL_PORT,
-    CORS_ALLOWED_HOST,
+    f"http://${FE_HOST}:${FE_PORT}",
+    ALLOWED_CORS_ORIGIN,
 ]
 CORS_ALLOW_CREDENTIALS = True
 
