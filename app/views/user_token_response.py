@@ -18,10 +18,11 @@ class UserTokenResponse(APIView):
     }
     """
     @staticmethod
-    def gen_post_response(code=status.HTTP_200_OK, err=None):
+    def gen_post_response(access_token, code=status.HTTP_200_OK, err=None):
         return Response(
             {
                 "error": err,
+                "access_token": access_token,
             },
             status=code,
         )
@@ -48,11 +49,9 @@ class UserTokenResponse(APIView):
                 raise errors.AuthorizationFailedError("User not found")
 
             # Validate: User found
-            res = self.gen_post_response()
-            res.set_cookie(
-                "access_token",
-                cryptoutils.gen_JWT(keystore["did"]),
-            )
+            access_token = cryptoutils.gen_JWT(keystore["did"])
+            res = self.gen_post_response(access_token)
+            res.set_cookie("access_token", access_token)
             return res
 
         # Handle all known error
