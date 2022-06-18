@@ -31,6 +31,10 @@ class ClientFaultError(BaseError):
     def __init__(self, message):
         super().__init__(status.HTTP_400_BAD_REQUEST, message)
 
+class NotFoundError(BaseError):
+    def __init__(self, message="Content not found"):
+        super().__init__(status.HTTP_404_NOT_FOUND, message)
+
 class UnhandledError(BaseError):
     def __init__(self, err):
         print(sys.exc_info()[2], file=sys.stderr)

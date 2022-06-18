@@ -38,13 +38,16 @@ class CoverLetterIDResponse(APIView):
 
             # Generate serializer
             serializer = CLDetailSerializer(
-                    CLData.objects.get(owner = did, pk=cl_id), # type: ignore
+                CLData.objects.get(owner = did, pk=cl_id), # type: ignore
             )
             return self.gen_get_response(serializer.data)
 
         # Handle all known error
         except errors.BaseError as err:
             return err.gen_response()
+
+        except CLData.DoesNotExist: # type: ignore
+            return errors.NotFoundError().gen_response()
 
         # Unknown error
         except Exception as err:

@@ -37,6 +37,9 @@ class PositionIDResponse(APIView):
         except errors.BaseError as err:
             return err.gen_response()
 
+        except PositionData.DoesNotExist: # type: ignore
+            return errors.NotFoundError().gen_response()
+
         # Unknown error
         except Exception as err:
             return errors.UnhandledError(err).gen_response()
